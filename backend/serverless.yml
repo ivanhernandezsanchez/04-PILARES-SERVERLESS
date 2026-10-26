@@ -18,7 +18,7 @@ functions:
           cors: true
  
   getEvent:
-    handler: dist/getEvent.handler
+    handler: dist/events/get.handler
     events:
       - http:
           path: events/{id}
@@ -26,10 +26,42 @@ functions:
           cors: true
  
   createEvent:
-    handler: dist/createEvent.handler
+    handler: dist/events/create.handler
     events:
       - http:
           path: events
           method: post
+          cors: true
+ 
+  listEvents:
+    handler: dist/events/list.handler
+    events:
+      - http:
+          path: events
+          method: get
+          cors: true
+ 
+  replaceEvent:
+    handler: dist/events/replace.handler
+    events:
+      - http:
+          path: events/{id}
+          method: put
+          cors: true
+ 
+  updateEvent:
+    handler: dist/events/update.handler
+    events:
+      - http:
+          path: events/{id}
+          method: patch
+          cors: true
+ 
+  deleteEvent:
+    handler: dist/events/delete.handler
+    events:
+      - http:
+          path: events/{id}
+          method: delete
           cors: true
  
