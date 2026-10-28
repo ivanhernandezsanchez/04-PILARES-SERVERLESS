@@ -1,7 +1,6 @@
-import type { FestivalEvent, EventInput, EventStatus } from './types';
- 
-// URL base cloud sin /events al final. Para volver a local, usa http://localhost:3000/dev.
-export const API_URL = 'https://rsejtseuf0.execute-api.us-east-1.amazonaws.com/dev';
+import type { Zone, ZoneInput, ZoneStatus } from './types';
+
+export const API_URL = 'http://localhost:3000/dev';
  
 async function request(path: string, method = 'GET', body?: unknown): Promise<unknown> {
   const response = await fetch(API_URL + path, {
@@ -17,23 +16,30 @@ async function request(path: string, method = 'GET', body?: unknown): Promise<un
   return value;
 }
  
-function isFestivalEvent(value: unknown): value is FestivalEvent {
+function isZone(value: unknown): value is Zone {
   return typeof value === 'object' && value !== null &&
     'id' in value && typeof value.id === 'string' &&
-    'artist' in value && typeof value.artist === 'string' &&
-    'space' in value && typeof value.space === 'string' &&
-    'time' in value && typeof value.time === 'string' &&
-    'status' in value && (value.status === 'CONFIRMED' || value.status === 'CANCELLED');
+    'name' in value && typeof value.name === 'string' &&
+    'capacity' in value && typeof value.capacity === 'number' &&
+    'status' in value && (value.status === 'OPEN' || value.status === 'FULL');
 }
  
-export async function getEvents(): Promise<FestivalEvent[]> {
-  const value = await request('/events');
-  if (!Array.isArray(value) || !value.every(isFestivalEvent)) throw new Error('La API no devolvió una lista de actuaciones válida');
+export async function getZones(): Promise<Zone[]> {
+  const value = await request('/zones');
+  if (!Array.isArray(value) || !value.every(isZone)) throw new Error('La API no devolvió una lista de espacios válida');
   return value;
 }
  
-export const createEvent = (input: EventInput) => request('/events', 'POST', input);
-export const replaceEvent = (id: string, input: EventInput) => request('/events/' + encodeURIComponent(id), 'PUT', input);
-export const updateEvent = (id: string, status: EventStatus) => request('/events/' + encodeURIComponent(id), 'PATCH', { status });
-export const deleteEvent = (id: string) => request('/events/' + encodeURIComponent(id), 'DELETE');
+export async function getZone(id: string): Promise<Zone> {
+  const value = await request('/zones/' + encodeURIComponent(id));
+  if (!isZone(value)) throw new Error('La API no devolvió un espacio válido');
+  return value;
+}
+
+export const createZone = (input: ZoneInput) => request('/zones', 'POST', input);
+export const replaceZone = (id: string, input: ZoneInput) => request('/zones/' + encodeURIComponent(id), 'PUT', input);
+export const updateZone = (id: string, changes: Partial<ZoneInput>) => request('/zones/' + encodeURIComponent(id), 'PATCH', changes);
+export const deleteZone = (id: string) => request('/zones/' + encodeURIComponent(id), 'DELETE');
+
+export const nextZoneStatus = (status: ZoneStatus): ZoneStatus => status === 'OPEN' ? 'FULL' : 'OPEN';
  

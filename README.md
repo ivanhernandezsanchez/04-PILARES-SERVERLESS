@@ -1,13 +1,13 @@
 # Festival Control · Bloque 01
- 
+
 ## Qué he construido
-[Describe la función y la ruta local que has probado.]
- 
+Hice una función que responde que la API está activa. La ruta es GET /hello.
+
 ## Qué he comprendido
-[Explica los tipos del handler, la compilación y dónde aparece EVENT RECIBIDO.]
- 
+La función recibe una petición y devuelve una respuesta. EVENT RECIBIDO aparece en la terminal.
+
 ## Qué he modificado
-[Explica qué cambió en el JSON y por qué no cambió la URL.]
- 
+Cambié el mensaje de la respuesta. La URL siguió igual porque la ruta no cambió.
+
 ## Cómo lo he comprobado
-[Indica resultado de Thunder, curl y log. Adjunta una evidencia propia.]
+El proyecto pasa la comprobación de TypeScript. Me falta guardar una captura de la petición y el registro.
